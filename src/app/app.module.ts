@@ -3,10 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { WeekComponent } from './week.component';
+import { DayComponent } from './day.component';
+import { HourComponent } from './hour.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    WeekComponent,
+    DayComponent,
+    HourComponent
   ],
   imports: [
     BrowserModule,
