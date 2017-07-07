@@ -5,3 +5,18 @@
   display: flex;
   flex-direction: column;
 }
+
+div {
+  flex: 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+span:first-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+span {
+  flex: 1;
+}
