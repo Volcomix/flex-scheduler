@@ -1,24 +1,31 @@
 :host {
   flex: 1;
-  display: flex;
   margin: 8px;
   min-height: 700px;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  /deep/ {
+    ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-right: 1px solid rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+    }
+    li {
+      flex: 1;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    }
+  }
 }
 
 ol {
   width: 50px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-bottom: none;
-  display: flex;
-  flex-direction: column;
-  list-style: none;
 }
 
 li {
-  flex: 1;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   font-size: 14px;
   color: rgba(0, 0, 0, 0.7);
   text-align: right;

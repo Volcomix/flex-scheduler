@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { Event } from './event';
+
 @Component({
   selector: 'scheduler-week',
   templateUrl: './week.component.html',
@@ -7,6 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class WeekComponent {
   @Input() date: Date;
+  @Input() events: Event[];
 
   days: Date[];
   hours: number[];
