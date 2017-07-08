@@ -19,8 +19,9 @@ export class DayComponent {
 
   constructor(private el: ElementRef) { }
 
-  @HostListener('mousedown', ['$event']) onMouseDown(event: MouseEvent) {
-    const startDate = this.getDate(event);
+  @HostListener('mousedown', ['$event'])
+  onMouseDown(mouseEvent: MouseEvent) {
+    const startDate = this.getDate(mouseEvent);
     const endDate = moment(startDate)
       .add(this.step, 'minutes')
       .toDate();
@@ -28,14 +29,16 @@ export class DayComponent {
     this.events.push(this.event);
   }
 
-  @HostListener('document:mousemove', ['$event']) onMouseMove(event: MouseEvent) {
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(mouseEvent: MouseEvent) {
     if (!this.event) {
       return;
     }
-    this.event.endDate = this.getDate(event);
+    this.event.endDate = this.getDate(mouseEvent);
   }
 
-  @HostListener('document:mouseup') onMouseUp() {
+  @HostListener('document:mouseup')
+  onMouseUp() {
     if (!this.event) {
       return;
     }
