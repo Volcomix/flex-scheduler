@@ -8,8 +8,8 @@ import { Event } from './event';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  events: Event[] = [{
-    startDate: new Date('2017-07-08 10:00:00'),
-    endDate: new Date('2017-07-08 14:00:00')
-  }];
+  events = [new Event(
+    new Date('2017-07-08 10:00:00'),
+    new Date('2017-07-08 14:00:00')
+  )];
 }

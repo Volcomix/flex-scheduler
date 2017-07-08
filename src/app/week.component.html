@@ -1,4 +1,5 @@
 <ol>
   <li *ngFor="let hour of hours">{{hour}}:00</li>
 </ol>
-<scheduler-day *ngFor="let day of days" [events]="events"></scheduler-day>
+<scheduler-day *ngFor="let day of days"
+               [events]="events"></scheduler-day>

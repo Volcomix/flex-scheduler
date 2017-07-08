@@ -1,6 +1,13 @@
-<ol class="grid">
+<ol>
   <li *ngFor="let hour of hours">
     <span></span>
     <span></span>
   </li>
 </ol>
+
+<ul>
+  <li *ngFor="let event of events"
+      [style.top.%]="event.startPercent"
+      [style.bottom.%]="100 - event.endPercent">
+  </li>
+</ul>
