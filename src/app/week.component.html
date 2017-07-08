@@ -2,6 +2,7 @@
   <li *ngFor="let hour of hours">{{hour | number:'2.0-0'}}:00</li>
 </ol>
 <scheduler-day *ngFor="let day of days"
-               [day]="day"
+               [day]="day.date"
                [hours]="hours"
-               [events]="getEvents(day)"></scheduler-day>
+               [events]="day.events"
+               [step]="step"></scheduler-day>
