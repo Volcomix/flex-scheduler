@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 
+import * as moment from 'moment';
+
 import { Event } from './event';
+import { Events } from './events';
 
 @Component({
   selector: 'scheduler-root',
@@ -9,8 +12,12 @@ import { Event } from './event';
 })
 export class AppComponent {
   date = new Date();
-  events = [new Event(
-    new Date('2017-07-08 10:00:00'),
-    new Date('2017-07-08 14:00:00')
-  )];
+  events: Events = {
+    [+moment().startOf('day').toDate()]: [
+      new Event(
+        new Date('2017-07-08 10:00:00'),
+        new Date('2017-07-08 14:00:00')
+      )
+    ]
+  };
 }

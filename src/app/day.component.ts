@@ -9,6 +9,6 @@ import { Event } from './event';
 })
 export class DayComponent {
   @Input() day: Date;
-  @Input() events: Event[];
   @Input() hours: number[];
+  @Input() events: Event[];
 }

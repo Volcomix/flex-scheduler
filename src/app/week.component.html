@@ -4,4 +4,4 @@
 <scheduler-day *ngFor="let day of days"
                [day]="day"
                [hours]="hours"
-               [events]="events"></scheduler-day>
+               [events]="getEvents(day)"></scheduler-day>

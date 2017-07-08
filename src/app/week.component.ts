@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import * as moment from 'moment';
 
-import { Event } from './event';
+import { Events } from './events';
 
 @Component({
   selector: 'scheduler-week',
@@ -11,22 +11,29 @@ import { Event } from './event';
 })
 export class WeekComponent {
   @Input() date: Date;
-  @Input() events: Event[];
+  @Input() events: Events;
 
-  days: Date[];
   hours: number[];
 
   constructor() {
-    this.days = [];
-    for (let i = 0; i < 7; i++) {
-      const day = moment(this.date)
-        .startOf('week')
-        .add(i, 'day');
-      this.days.push(day.toDate());
-    }
     this.hours = [];
     for (let i = 0; i < 24; i++) {
       this.hours.push(i);
     }
+  }
+
+  get days() {
+    const days: Date[] = [];
+    for (let i = 0; i < 7; i++) {
+      const day = moment(this.date)
+        .startOf('week')
+        .add(i, 'day');
+      days.push(day.toDate());
+    }
+    return days;
+  }
+
+  getEvents(day: Date) {
+    return this.events[+day];
   }
 }
