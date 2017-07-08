@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import * as moment from 'moment';
+
 import { Event } from './event';
 
 @Component({
@@ -17,7 +19,10 @@ export class WeekComponent {
   constructor() {
     this.days = [];
     for (let i = 0; i < 7; i++) {
-      this.days.push(new Date());
+      const day = moment(this.date)
+        .startOf('week')
+        .add(i, 'day');
+      this.days.push(day.toDate());
     }
     this.hours = [];
     for (let i = 0; i < 24; i++) {
