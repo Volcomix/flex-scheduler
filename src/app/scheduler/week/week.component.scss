@@ -1,21 +1,22 @@
+$primary-line: 1px solid rgba(0, 0, 0, 0.2);
 :host {
   flex: 1;
   margin: 8px;
   min-height: 500px;
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: $primary-line;
+  border-top: $primary-line;
   display: flex;
   /deep/ {
     ol {
       margin: 0;
       padding: 0;
-      border-right: 1px solid rgba(0, 0, 0, 0.2);
+      border-right: $primary-line;
       display: flex;
       flex-direction: column;
       list-style: none;
       li {
         flex: 1;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        border-bottom: $primary-line;
       }
     }
   }
