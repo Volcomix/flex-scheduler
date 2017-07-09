@@ -45,6 +45,7 @@ export class EventComponent {
     if (mouseEvent.button) { // Accept left mouse button and touch only
       return;
     }
+    mouseEvent.preventDefault();
     mouseEvent.stopPropagation();
     this.resize.emit(this.event);
   }
