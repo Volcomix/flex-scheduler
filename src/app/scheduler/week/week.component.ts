@@ -1,5 +1,6 @@
 import {
   Component,
+  ViewChild,
   ElementRef,
   Input,
   OnChanges,
@@ -25,18 +26,18 @@ export class WeekComponent implements OnChanges {
   @Input() events: Events;
   @Input() step: number;
 
+  @ViewChild('container') container: ElementRef;
+
   days: Day[];
   hours: number[];
 
   resizingEvent: Event;
   movingEvent: Event;
 
-  private el: HTMLElement;
   private startDate: Date;
   private moveOffset: number;
 
   constructor(el: ElementRef) {
-    this.el = el.nativeElement;
     this.hours = [];
     for (let i = 0; i < 24; i++) {
       this.hours.push(i);
@@ -73,7 +74,7 @@ export class WeekComponent implements OnChanges {
     return this.resizingEvent !== undefined;
   }
 
-  @HostBinding('class.movingEvent') get isMoveingEvent(): boolean {
+  @HostBinding('class.moving') get isMoveingEvent(): boolean {
     return this.movingEvent !== undefined;
   }
 
@@ -86,7 +87,6 @@ export class WeekComponent implements OnChanges {
     this.moveOffset = movingEvent.offset;
   }
 
-  @HostListener('mousedown', ['$event'])
   onMouseDown(mouseEvent: MouseEvent) {
     if (mouseEvent.button !== 0) {
       return;
@@ -94,7 +94,6 @@ export class WeekComponent implements OnChanges {
     this.createEvent(mouseEvent);
   }
 
-  @HostListener('touchstart', ['$event'])
   onTouchStart(touchEvent: TouchEvent) {
     touchEvent.preventDefault();
     this.createEvent(touchEvent.touches[0]);
@@ -208,7 +207,8 @@ export class WeekComponent implements OnChanges {
   }
 
   private getDay(clientX: number): Day {
-    const rect = this.el.getBoundingClientRect();
+    const container: HTMLElement = this.container.nativeElement;
+    const rect = container.getBoundingClientRect();
     const max = rect.right - rect.left;
     const x = clientX - rect.left;
     let idx = Math.floor(7 * x / max);
@@ -221,7 +221,8 @@ export class WeekComponent implements OnChanges {
   }
 
   private getDate(day: Date, clientY: number): Date {
-    const rect = this.el.getBoundingClientRect();
+    const container: HTMLElement = this.container.nativeElement;
+    const rect = container.getBoundingClientRect();
     const max = rect.bottom - rect.top;
     const y = clientY - rect.top;
     let minutes = Event.minutesPerDay * y / max;
