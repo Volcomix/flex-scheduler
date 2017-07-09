@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { WeekComponent } from './week.component';
-import { DayComponent } from './day.component';
+import { WeekComponent } from './scheduler/week/week.component';
+import { DayComponent } from './scheduler/day/day.component';
 
 @NgModule({
   declarations: [

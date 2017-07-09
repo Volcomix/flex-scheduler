@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 import * as moment from 'moment';
 
-import { Event } from './event';
-import { Events } from './events';
+import { Event } from './event.model';
+import { Events } from './events.model';
 
 @Component({
   selector: 'scheduler-root',

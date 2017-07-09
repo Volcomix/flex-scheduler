@@ -2,7 +2,7 @@ import { Component, Input, HostListener, ElementRef } from '@angular/core';
 
 import * as moment from 'moment';
 
-import { Event } from './event';
+import { Event } from '../event.model';
 
 @Component({
   selector: 'scheduler-day',

@@ -2,8 +2,8 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import * as moment from 'moment';
 
-import { Events } from './events';
-import { Day } from './day';
+import { Events } from '../events.model';
+import { Day } from '../day.model';
 
 @Component({
   selector: 'scheduler-week',
