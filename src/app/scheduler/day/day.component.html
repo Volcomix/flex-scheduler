@@ -6,8 +6,11 @@
   </li>
 </ol>
 
-<div [class.resizing]="resizingEvent">
+<div [class.resizing]="resizingEvent"
+     [class.moving]="movingEvent">
   <scheduler-event *ngFor="let event of events"
                    [event]="event"
-                   (resize)="startResizingEvent($event)"></scheduler-event>
+                   (resize)="startResizingEvent(event)"
+                   (move)="startMovingEvent(event, $event)">
+  </scheduler-event>
 </div>

@@ -22,10 +22,15 @@ export class DayComponent {
   @Input() step: number;
 
   resizingEvent: Event;
+  movingEvent: Event;
 
+  private el: HTMLElement;
   private startDate: Date;
+  private moveOffset: number;
 
-  constructor(private el: ElementRef) { }
+  constructor(el: ElementRef) {
+    this.el = el.nativeElement;
+  }
 
   @HostBinding('style.cursor') get cursor() {
     if (this.resizingEvent) {
@@ -39,6 +44,11 @@ export class DayComponent {
     this.resizingEvent = event;
   }
 
+  startMovingEvent(event: Event, offset: number) {
+    this.movingEvent = event;
+    this.moveOffset = offset;
+  }
+
   @HostListener('mousedown', ['$event'])
   onMouseDown(mouseEvent: MouseEvent) {
     if (mouseEvent.button !== 0) {
@@ -49,8 +59,8 @@ export class DayComponent {
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(touchEvent: TouchEvent) {
-    this.createEvent(touchEvent.touches[0].clientY);
     touchEvent.preventDefault();
+    this.createEvent(touchEvent.touches[0].clientY);
   }
 
   private createEvent(clientY: number) {
@@ -76,18 +86,23 @@ export class DayComponent {
       return;
     }
     mouseEvent.preventDefault();
-    this.resizeEvent(mouseEvent.clientY);
+    this.updateEvent(mouseEvent.clientY);
   }
 
   @HostListener('document:touchmove', ['$event'])
   onTouchMove(touchEvent: TouchEvent) {
-    this.resizeEvent(touchEvent.touches[0].clientY);
+    this.updateEvent(touchEvent.touches[0].clientY);
+  }
+
+  private updateEvent(clientY: number) {
+    if (this.resizingEvent) {
+      this.resizeEvent(clientY);
+    } else if (this.movingEvent) {
+      this.moveEvent(clientY);
+    }
   }
 
   private resizeEvent(clientY: number) {
-    if (!this.resizingEvent) {
-      return;
-    }
     const date = this.getDate(clientY);
     if (this.startDate && date <= this.startDate) {
       this.resizingEvent.startDate = date;
@@ -96,18 +111,33 @@ export class DayComponent {
     }
   }
 
-  @HostListener('document:mouseup')
-  @HostListener('document:touchend')
-  onTouchEnd() {
-    if (!this.resizingEvent) {
+  private moveEvent(clientY: number) {
+    if (!this.movingEvent) {
       return;
     }
-    this.resizingEvent = undefined;
-    this.startDate = undefined;
+    const date = this.getDate(clientY - this.moveOffset);
+    const diff = moment(this.movingEvent.startDate)
+      .diff(date, 'minutes');
+    this.movingEvent.startDate = date;
+    this.movingEvent.endDate = moment(this.movingEvent.endDate)
+      .subtract(diff, 'minutes')
+      .toDate();
+  }
+
+  @HostListener('document:mouseup')
+  @HostListener('document:touchend')
+  onMoveEnd() {
+    if (this.resizingEvent) {
+      this.resizingEvent = undefined;
+      this.startDate = undefined;
+    } else if (this.movingEvent) {
+      this.movingEvent = undefined;
+      this.moveOffset = undefined;
+    }
   }
 
   private getDate(clientY: number) {
-    const rect = this.el.nativeElement.getBoundingClientRect();
+    const rect = this.el.getBoundingClientRect();
     const max = rect.bottom - rect.top;
     const y = clientY - rect.top;
     let minutes = Event.minutesPerDay * y / max;

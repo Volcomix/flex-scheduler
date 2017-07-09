@@ -1,8 +1,10 @@
 import {
   Component,
+  ElementRef,
   Input,
   Output,
   EventEmitter,
+  HostListener,
   HostBinding
 } from '@angular/core';
 
@@ -17,7 +19,14 @@ import { Event } from '../event.model';
 })
 export class EventComponent {
   @Input() event: Event;
-  @Output() resize = new EventEmitter<Event>();
+  @Output() resize = new EventEmitter<void>();
+  @Output() move = new EventEmitter<number>();
+
+  private el: HTMLElement;
+
+  constructor(el: ElementRef) {
+    this.el = el.nativeElement;
+  }
 
   @HostBinding('style.top.%') get top() {
     return this.toPercent(this.event.startDate);
@@ -47,6 +56,29 @@ export class EventComponent {
     }
     mouseEvent.preventDefault();
     mouseEvent.stopPropagation();
-    this.resize.emit(this.event);
+    this.resize.emit();
+  }
+
+  @HostListener('mousedown', ['$event'])
+  onMouseDown(mouseEvent: MouseEvent) {
+    if (mouseEvent.button !== 0) {
+      return;
+    }
+    mouseEvent.stopPropagation();
+    const offset = this.getOffset(mouseEvent.clientY);
+    this.move.emit(offset);
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(touchEvent: TouchEvent) {
+    touchEvent.preventDefault();
+    touchEvent.stopPropagation();
+    const offset = this.getOffset(touchEvent.touches[0].clientY);
+    this.move.emit(offset);
+  }
+
+  private getOffset(clientY: number) {
+    const rect = this.el.getBoundingClientRect();
+    return clientY - rect.top;
   }
 }
