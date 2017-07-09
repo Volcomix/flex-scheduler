@@ -95,10 +95,4 @@ export class DayComponent {
       .minutes(minutes)
       .toDate();
   }
-
-  getDuration(event: Event) {
-    const startDate = moment(event.startDate);
-    const endDate = moment(event.endDate);
-    return endDate.diff(startDate, 'minutes');
-  }
 }
