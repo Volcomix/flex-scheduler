@@ -15,7 +15,7 @@ export class DayComponent {
   @Input() events: Event[];
   @Input() step: number;
 
-  private event: Event;
+  resizingEvent: Event;
 
   constructor(private el: ElementRef) { }
 
@@ -35,12 +35,13 @@ export class DayComponent {
     const endDate = moment(startDate)
       .add(this.step, 'minutes')
       .toDate();
-    this.event = new Event(startDate, endDate);
-    this.events.push(this.event);
+    this.resizingEvent = new Event(startDate, endDate);
+    this.events.push(this.resizingEvent);
   }
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(mouseEvent: MouseEvent) {
+    mouseEvent.preventDefault();
     this.resizeEvent(mouseEvent.clientY);
   }
 
@@ -50,19 +51,19 @@ export class DayComponent {
   }
 
   private resizeEvent(clientY: number) {
-    if (!this.event) {
+    if (!this.resizingEvent) {
       return;
     }
-    this.event.endDate = this.getDate(clientY);
+    this.resizingEvent.endDate = this.getDate(clientY);
   }
 
   @HostListener('document:mouseup')
   @HostListener('document:touchend')
   onTouchEnd() {
-    if (!this.event) {
+    if (!this.resizingEvent) {
       return;
     }
-    this.event = undefined;
+    this.resizingEvent = undefined;
   }
 
   private getDate(clientY: number) {
@@ -74,5 +75,11 @@ export class DayComponent {
     return moment(this.day)
       .minutes(minutes)
       .toDate();
+  }
+
+  getDuration(event: Event) {
+    const startDate = moment(event.startDate);
+    const endDate = moment(event.endDate);
+    return endDate.diff(startDate, 'minutes');
   }
 }
