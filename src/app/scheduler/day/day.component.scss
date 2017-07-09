@@ -24,14 +24,4 @@ div {
   right: 0;
   bottom: 0;
   left: 0;
-  &.resizing,
-  &.moving {
-    user-select: none;
-  }
-  &.resizing {
-    cursor: ns-resize;
-  }
-  &.moving {
-    cursor: move;
-  }
 }

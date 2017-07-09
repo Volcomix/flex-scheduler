@@ -6,6 +6,16 @@ $primary-line: 1px solid rgba(0, 0, 0, 0.2);
   border-left: $primary-line;
   border-top: $primary-line;
   display: flex;
+  &.resizing,
+  &.moving {
+    user-select: none;
+  }
+  &.resizing {
+    cursor: ns-resize;
+  }
+  &.moving {
+    cursor: move;
+  }
   /deep/ {
     ol {
       margin: 0;

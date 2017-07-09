@@ -5,4 +5,6 @@
                [day]="day.date"
                [hours]="hours"
                [events]="day.events"
-               [step]="step"></scheduler-day>
+               [step]="step"
+               (resizeEvent)="startResizingEvent($event)"
+               (moveEvent)="startMovingEvent($event)"></scheduler-day>

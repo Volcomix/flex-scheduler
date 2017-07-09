@@ -6,8 +6,7 @@
   </li>
 </ol>
 
-<div [class.resizing]="resizingEvent"
-     [class.moving]="movingEvent">
+<div>
   <scheduler-event *ngFor="let event of events"
                    [event]="event"
                    (resize)="startResizingEvent(event)"
