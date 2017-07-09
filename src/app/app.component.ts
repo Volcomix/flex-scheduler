@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 
-import * as moment from 'moment';
-
-import { Event } from './event.model';
-import { Events } from './events.model';
+import { Events } from './scheduler/events.model';
 
 @Component({
   selector: 'scheduler-root',
