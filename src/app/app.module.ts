@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WeekComponent } from './scheduler/week/week.component';
 import { DayComponent } from './scheduler/day/day.component';
+import { EventComponent } from './scheduler/event/event.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WeekComponent,
-    DayComponent
+    DayComponent,
+    EventComponent
   ],
   imports: [
     BrowserModule,

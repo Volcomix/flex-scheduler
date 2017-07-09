@@ -5,12 +5,11 @@
   </li>
 </ol>
 
-<ul [class.resizing]="resizingEvent">
-  <li *ngFor="let event of events"
-      [style.top.%]="event.startPercent"
-      [style.bottom.%]="100 - event.endPercent"
-      [class.compact]="getDuration(event) < 60">
-    <span>{{event.startDate | date:'HH:mm'}}</span>
-    <span>{{event.endDate | date:'HH:mm'}}</span>
-  </li>
-</ul>
+<div [class.resizing]="resizingEvent">
+  <scheduler-event *ngFor="let event of events"
+                   [style.top.%]="event.startPercent"
+                   [style.bottom.%]="100 - event.endPercent"
+                   [class.compact]="getDuration(event) < 60"
+                   [event]="event">
+  </scheduler-event>
+</div>
