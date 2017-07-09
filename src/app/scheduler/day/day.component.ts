@@ -35,6 +35,10 @@ export class DayComponent {
     }
   }
 
+  startResizingEvent(event: Event) {
+    this.resizingEvent = event;
+  }
+
   @HostListener('mousedown', ['$event'])
   onMouseDown(mouseEvent: MouseEvent) {
     if (mouseEvent.button !== 0) {
@@ -51,6 +55,14 @@ export class DayComponent {
 
   private createEvent(clientY: number) {
     this.startDate = this.getDate(clientY);
+
+    // Start hour must not be 24h
+    if (this.startDate.getDate() > this.day.getDate()) {
+      this.startDate = moment(this.startDate)
+        .subtract(this.step, 'minutes')
+        .toDate();
+    }
+
     const endDate = moment(this.startDate)
       .add(this.step, 'minutes')
       .toDate();
@@ -77,9 +89,9 @@ export class DayComponent {
       return;
     }
     const date = this.getDate(clientY);
-    if (date <= this.startDate) {
+    if (this.startDate && date <= this.startDate) {
       this.resizingEvent.startDate = date;
-    } else {
+    } else if (this.startDate || date > this.resizingEvent.startDate) {
       this.resizingEvent.endDate = date;
     }
   }

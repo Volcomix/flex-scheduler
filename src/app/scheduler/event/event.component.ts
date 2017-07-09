@@ -1,4 +1,10 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  HostBinding
+} from '@angular/core';
 
 import * as moment from 'moment';
 
@@ -11,13 +17,15 @@ import { Event } from '../event.model';
 })
 export class EventComponent {
   @Input() event: Event;
+  @Output() resize = new EventEmitter<Event>();
 
   @HostBinding('style.top.%') get top() {
     return this.toPercent(this.event.startDate);
   }
 
   @HostBinding('style.bottom.%') get bottom() {
-    return 100 - this.toPercent(this.event.endDate);
+    // End hour cannot be 0h, so replace it with 24h
+    return 100 - (this.toPercent(this.event.endDate) || 100);
   }
 
   @HostBinding('class.compact') get isCompact() {
@@ -31,5 +39,13 @@ export class EventComponent {
     const hours = date.getHours();
     const minutes = hours * 60 + date.getMinutes();
     return 100 * minutes / Event.minutesPerDay;
+  }
+
+  resizeEvent(mouseEvent: MouseEvent) {
+    if (mouseEvent.button) { // Accept left mouse button and touch only
+      return;
+    }
+    mouseEvent.stopPropagation();
+    this.resize.emit(this.event);
   }
 }

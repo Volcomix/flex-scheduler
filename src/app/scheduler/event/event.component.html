@@ -1,3 +1,4 @@
 <span>{{event.startDate | date:'HH:mm'}}</span>
 <span>{{event.endDate | date:'HH:mm'}}</span>
-<footer></footer>
+<footer (mousedown)="resizeEvent($event)"
+        (touchstart)="resizeEvent($event)"></footer>
