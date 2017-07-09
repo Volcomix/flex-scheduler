@@ -115,13 +115,22 @@ export class DayComponent {
     if (!this.movingEvent) {
       return;
     }
-    const date = this.getDate(clientY - this.moveOffset);
-    const diff = moment(this.movingEvent.startDate)
-      .diff(date, 'minutes');
-    this.movingEvent.startDate = date;
-    this.movingEvent.endDate = moment(this.movingEvent.endDate)
-      .subtract(diff, 'minutes')
+    const diff = moment(this.movingEvent.endDate)
+      .diff(this.movingEvent.startDate, 'minutes');
+    let startDate = this.getDate(clientY - this.moveOffset);
+    let endDate = moment(startDate)
+      .add(diff, 'minutes')
       .toDate();
+    if (endDate.getDate() > this.day.getDate()) {
+      endDate = moment(this.day)
+        .add(1, 'day')
+        .toDate();
+      startDate = moment(endDate)
+        .subtract(diff, 'minutes')
+        .toDate();
+    }
+    this.movingEvent.startDate = startDate;
+    this.movingEvent.endDate = endDate;
   }
 
   @HostListener('document:mouseup')
