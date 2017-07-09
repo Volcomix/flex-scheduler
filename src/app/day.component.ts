@@ -21,7 +21,17 @@ export class DayComponent {
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(mouseEvent: MouseEvent) {
-    const startDate = this.getDate(mouseEvent);
+    this.createEvent(mouseEvent.clientY);
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(touchEvent: TouchEvent) {
+    this.createEvent(touchEvent.touches[0].clientY);
+    touchEvent.preventDefault();
+  }
+
+  private createEvent(clientY: number) {
+    const startDate = this.getDate(clientY);
     const endDate = moment(startDate)
       .add(this.step, 'minutes')
       .toDate();
@@ -31,24 +41,34 @@ export class DayComponent {
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(mouseEvent: MouseEvent) {
+    this.resizeEvent(mouseEvent.clientY);
+  }
+
+  @HostListener('document:touchmove', ['$event'])
+  onTouchMove(touchEvent: TouchEvent) {
+    this.resizeEvent(touchEvent.touches[0].clientY);
+  }
+
+  private resizeEvent(clientY: number) {
     if (!this.event) {
       return;
     }
-    this.event.endDate = this.getDate(mouseEvent);
+    this.event.endDate = this.getDate(clientY);
   }
 
   @HostListener('document:mouseup')
-  onMouseUp() {
+  @HostListener('document:touchend')
+  onTouchEnd() {
     if (!this.event) {
       return;
     }
     this.event = undefined;
   }
 
-  private getDate(event: MouseEvent) {
+  private getDate(clientY: number) {
     const rect = this.el.nativeElement.getBoundingClientRect();
     const max = rect.bottom - rect.top;
-    const y = event.clientY - rect.top;
+    const y = clientY - rect.top;
     let minutes = Event.minutesPerDay * y / max;
     minutes = Math.round(minutes / this.step) * this.step;
     return moment(this.day)
