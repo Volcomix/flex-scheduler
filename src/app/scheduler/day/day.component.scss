@@ -28,4 +28,10 @@ div {
   &.moving {
     user-select: none;
   }
+  &.resizing {
+    cursor: ns-resize;
+  }
+  &.moving {
+    cursor: move;
+  }
 }

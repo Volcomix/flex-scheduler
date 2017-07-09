@@ -2,8 +2,7 @@ import {
   Component,
   ElementRef,
   Input,
-  HostListener,
-  HostBinding
+  HostListener
 } from '@angular/core';
 
 import * as moment from 'moment';
@@ -30,14 +29,6 @@ export class DayComponent {
 
   constructor(el: ElementRef) {
     this.el = el.nativeElement;
-  }
-
-  @HostBinding('style.cursor') get cursor() {
-    if (this.resizingEvent) {
-      return 'ns-resize';
-    } else {
-      return 'auto';
-    }
   }
 
   startResizingEvent(event: Event) {

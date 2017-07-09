@@ -18,6 +18,11 @@
       margin: 0 6px;
     }
   }
+  cursor: pointer;
+  .resizing &,
+  .moving & {
+    cursor: inherit;
+  }
 }
 
 footer {
