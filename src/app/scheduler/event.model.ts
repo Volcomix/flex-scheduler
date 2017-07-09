@@ -14,6 +14,6 @@ export class Event {
   }
 
   get endPercent() {
-    return this.toPercent(this.endDate);
+    return this.toPercent(this.endDate) || 100; // End cannot be 0
   }
 }

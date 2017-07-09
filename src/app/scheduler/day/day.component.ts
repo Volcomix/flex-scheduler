@@ -17,6 +17,8 @@ export class DayComponent {
 
   resizingEvent: Event;
 
+  private startDate: Date;
+
   constructor(private el: ElementRef) { }
 
   @HostListener('mousedown', ['$event'])
@@ -31,11 +33,11 @@ export class DayComponent {
   }
 
   private createEvent(clientY: number) {
-    const startDate = this.getDate(clientY);
-    const endDate = moment(startDate)
+    this.startDate = this.getDate(clientY);
+    const endDate = moment(this.startDate)
       .add(this.step, 'minutes')
       .toDate();
-    this.resizingEvent = new Event(startDate, endDate);
+    this.resizingEvent = new Event(this.startDate, endDate);
     this.events.push(this.resizingEvent);
   }
 
@@ -54,7 +56,12 @@ export class DayComponent {
     if (!this.resizingEvent) {
       return;
     }
-    this.resizingEvent.endDate = this.getDate(clientY);
+    const date = this.getDate(clientY);
+    if (date <= this.startDate) {
+      this.resizingEvent.startDate = date;
+    } else {
+      this.resizingEvent.endDate = date;
+    }
   }
 
   @HostListener('document:mouseup')
@@ -64,6 +71,7 @@ export class DayComponent {
       return;
     }
     this.resizingEvent = undefined;
+    this.startDate = undefined;
   }
 
   private getDate(clientY: number) {
@@ -72,6 +80,11 @@ export class DayComponent {
     const y = clientY - rect.top;
     let minutes = Event.minutesPerDay * y / max;
     minutes = Math.round(minutes / this.step) * this.step;
+    if (minutes < 0) {
+      minutes = 0;
+    } else if (minutes > Event.minutesPerDay) {
+      minutes = Event.minutesPerDay;
+    }
     return moment(this.day)
       .minutes(minutes)
       .toDate();
