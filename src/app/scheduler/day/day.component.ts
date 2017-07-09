@@ -23,6 +23,9 @@ export class DayComponent {
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(mouseEvent: MouseEvent) {
+    if (mouseEvent.button !== 0) {
+      return;
+    }
     this.createEvent(mouseEvent.clientY);
   }
 
@@ -43,6 +46,9 @@ export class DayComponent {
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(mouseEvent: MouseEvent) {
+    if (mouseEvent.button !== 0) {
+      return;
+    }
     mouseEvent.preventDefault();
     this.resizeEvent(mouseEvent.clientY);
   }
