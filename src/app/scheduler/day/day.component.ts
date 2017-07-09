@@ -1,4 +1,10 @@
-import { Component, Input, HostListener, ElementRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  HostListener,
+  HostBinding
+} from '@angular/core';
 
 import * as moment from 'moment';
 
@@ -20,6 +26,14 @@ export class DayComponent {
   private startDate: Date;
 
   constructor(private el: ElementRef) { }
+
+  @HostBinding('style.cursor') get cursor() {
+    if (this.resizingEvent) {
+      return 'ns-resize';
+    } else {
+      return 'auto';
+    }
+  }
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(mouseEvent: MouseEvent) {
