@@ -74,7 +74,7 @@ export class WeekComponent implements OnChanges {
     return this.resizingEvent !== undefined;
   }
 
-  @HostBinding('class.moving') get isMoveingEvent(): boolean {
+  @HostBinding('class.moving') get isMovingEvent(): boolean {
     return this.movingEvent !== undefined;
   }
 
