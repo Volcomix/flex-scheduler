@@ -20,7 +20,7 @@ export class WeekComponent {
   @Input() events: Event[];
   @Input() step: number;
 
-  @ViewChild('container') container: ElementRef;
+  @ViewChild('eventsContainer') eventsContainer: ElementRef;
 
   days: Date[];
   hours: number[];
@@ -174,7 +174,7 @@ export class WeekComponent {
   }
 
   private getDay(clientX: number): Date {
-    const container: HTMLElement = this.container.nativeElement;
+    const container: HTMLElement = this.eventsContainer.nativeElement;
     const rect = container.getBoundingClientRect();
     const max = rect.right - rect.left;
     const x = clientX - rect.left;
@@ -188,7 +188,7 @@ export class WeekComponent {
   }
 
   private getDate(day: Date, clientY: number): Date {
-    const container: HTMLElement = this.container.nativeElement;
+    const container: HTMLElement = this.eventsContainer.nativeElement;
     const rect = container.getBoundingClientRect();
     const max = rect.bottom - rect.top;
     const y = clientY - rect.top;

@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WeekComponent } from './scheduler/week/week.component';
-import { DayComponent } from './scheduler/day/day.component';
 import { EventComponent } from './scheduler/event/event.component';
 
 const locale = 'fr';
@@ -17,7 +16,6 @@ moment.locale(locale);
   declarations: [
     AppComponent,
     WeekComponent,
-    DayComponent,
     EventComponent
   ],
   imports: [

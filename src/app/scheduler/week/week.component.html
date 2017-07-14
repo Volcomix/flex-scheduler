@@ -1,14 +1,18 @@
-<ol>
+<ol class="hours">
   <li *ngFor="let hour of hours">{{hour | number:'2.0-0'}}:00</li>
 </ol>
 
 <div>
-  <div>
-    <scheduler-day *ngFor="let day of days"
-                   [hours]="hours"></scheduler-day>
+  <div class="grid">
+    <ol *ngFor="let day of days">
+      <li *ngFor="let hour of hours">
+        <span></span>
+        <span></span>
+      </li>
+    </ol>
   </div>
 
-  <div #container
+  <div #eventsContainer
        (mousedown)="onMouseDown($event)"
        (touchstart)="onTouchStart($event)">
     <scheduler-event *ngFor="let event of events"
