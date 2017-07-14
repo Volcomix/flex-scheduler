@@ -16,6 +16,20 @@ $primary-line: 1px solid rgba(0, 0, 0, 0.2);
   &.moving {
     cursor: move;
   }
+  >div {
+    flex: 1;
+    position: relative;
+    div {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      &:first-child {
+        display: flex;
+      }
+    }
+  }
   /deep/ {
     ol {
       margin: 0;
@@ -41,9 +55,4 @@ ol {
     padding: 2px;
     overflow: hidden;
   }
-}
-
-div {
-  flex: 1;
-  display: flex;
 }

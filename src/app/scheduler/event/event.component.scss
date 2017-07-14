@@ -1,8 +1,6 @@
 :host {
   position: absolute;
-  left: 0px;
-  right: 50%;
-  margin: -1px 2px 0 2px; // To overlay top border
+  margin: -1px 2px 0 2px; // -1 To overlay top border
   background-color: rgba(152, 152, 230, 0.8);
   border: 1px solid rgba(86, 86, 214, 1);
   font-size: 10px;

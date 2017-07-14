@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Events } from './scheduler/events.model';
+import { Event } from './scheduler/event.model';
 
 @Component({
   selector: 'scheduler-root',
@@ -9,6 +9,6 @@ import { Events } from './scheduler/events.model';
 })
 export class AppComponent {
   date = new Date();
-  events: Events = {};
+  events: Event[] = [];
   step = 30;
 }

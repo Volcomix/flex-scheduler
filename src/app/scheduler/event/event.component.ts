@@ -12,6 +12,8 @@ import * as moment from 'moment';
 
 import { Event } from '../event.model';
 
+const halfDayPercent = 50 / 7;
+
 @Component({
   selector: 'scheduler-event',
   templateUrl: './event.component.html',
@@ -28,6 +30,10 @@ export class EventComponent {
     this.el = el.nativeElement;
   }
 
+  private get weekDay() {
+    return moment(this.event.startDate).weekday();
+  }
+
   @HostBinding('style.top.%') get top() {
     return this.toPercent(this.event.startDate);
   }
@@ -35,6 +41,14 @@ export class EventComponent {
   @HostBinding('style.bottom.%') get bottom() {
     // End hour cannot be 0h, so replace it with 24h
     return 100 - (this.toPercent(this.event.endDate) || 100);
+  }
+
+  @HostBinding('style.left.%') get left() {
+    return 100 * this.weekDay / 7;
+  }
+
+  @HostBinding('style.right.%') get right() {
+    return 100 * (1 - (this.weekDay + 1) / 7) + halfDayPercent;
   }
 
   @HostBinding('class.compact') get isCompact() {

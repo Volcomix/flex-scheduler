@@ -3,38 +3,31 @@ import {
   ViewChild,
   ElementRef,
   Input,
-  OnChanges,
-  SimpleChanges,
   HostListener,
   HostBinding,
 } from '@angular/core';
 
 import * as moment from 'moment';
 
-import { Events } from '../events.model';
 import { Event } from '../event.model';
-import { Day } from '../day.model';
-import { MovingEvent } from '../day/day.component';
 
 @Component({
   selector: 'scheduler-week',
   templateUrl: './week.component.html',
   styleUrls: ['./week.component.scss']
 })
-export class WeekComponent implements OnChanges {
-  @Input() date: Date;
-  @Input() events: Events;
+export class WeekComponent {
+  @Input() events: Event[];
   @Input() step: number;
 
   @ViewChild('container') container: ElementRef;
 
-  days: Day[];
+  days: Date[];
   hours: number[];
 
-  resizingEvent: Event;
-  movingEvent: Event;
-
-  private startDate: Date;
+  private resizingEvent: Event;
+  private resizeStartDate: Date;
+  private movingEvent: Event;
   private moveOffset: number;
 
   constructor(el: ElementRef) {
@@ -44,29 +37,14 @@ export class WeekComponent implements OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const date: Date = changes.date.currentValue;
-    const events: Events = changes.events.currentValue;
-    const hasDateChanged = date !== changes.date.previousValue;
-    const hasEventsChanged = events !== changes.events.previousValue;
-    if (!hasDateChanged && !hasEventsChanged) {
-      return;
-    }
-    this.initDays(date, events);
-  }
-
-  private initDays(date: Date, events: Events) {
+  @Input() set date(date: Date) {
     this.days = [];
     for (let i = 0; i < 7; i++) {
       const day = moment(date)
         .startOf('week')
         .add(i, 'day')
         .toDate();
-      events[+day] = events[+day] || [];
-      this.days.push({
-        date: day,
-        events: events[+day]
-      });
+      this.days.push(day);
     }
   }
 
@@ -82,9 +60,9 @@ export class WeekComponent implements OnChanges {
     this.resizingEvent = event;
   }
 
-  startMovingEvent(movingEvent: MovingEvent) {
-    this.movingEvent = movingEvent.event;
-    this.moveOffset = movingEvent.offset;
+  startMovingEvent(event: Event, offset: number) {
+    this.movingEvent = event;
+    this.moveOffset = offset;
   }
 
   onMouseDown(mouseEvent: MouseEvent) {
@@ -104,20 +82,20 @@ export class WeekComponent implements OnChanges {
     clientY: number
   }) {
     const day = this.getDay(clientX);
-    this.startDate = this.getDate(day.date, clientY);
+    this.resizeStartDate = this.getDate(day, clientY);
 
     // Start hour must not be 24h
-    if (this.startDate.getDate() > day.date.getDate()) {
-      this.startDate = moment(this.startDate)
+    if (this.resizeStartDate.getDate() > day.getDate()) {
+      this.resizeStartDate = moment(this.resizeStartDate)
         .subtract(this.step, 'minutes')
         .toDate();
     }
 
-    const endDate = moment(this.startDate)
+    const endDate = moment(this.resizeStartDate)
       .add(this.step, 'minutes')
       .toDate();
-    this.resizingEvent = new Event(this.startDate, endDate);
-    day.events.push(this.resizingEvent);
+    this.resizingEvent = new Event(this.resizeStartDate, endDate);
+    this.events.push(this.resizingEvent);
   }
 
   @HostListener('document:mousemove', ['$event'])
@@ -150,9 +128,9 @@ export class WeekComponent implements OnChanges {
       .startOf('day')
       .toDate();
     const date = this.getDate(day, clientY);
-    if (this.startDate && date <= this.startDate) {
+    if (this.resizeStartDate && date <= this.resizeStartDate) {
       this.resizingEvent.startDate = date;
-    } else if (this.startDate || date > this.resizingEvent.startDate) {
+    } else if (this.resizeStartDate || date > this.resizingEvent.startDate) {
       this.resizingEvent.endDate = date;
     }
   }
@@ -167,20 +145,17 @@ export class WeekComponent implements OnChanges {
     const diff = moment(this.movingEvent.endDate)
       .diff(this.movingEvent.startDate, 'minutes');
     const day = this.getDay(clientX);
-    let startDate = this.getDate(day.date, clientY - this.moveOffset);
+    let startDate = this.getDate(day, clientY - this.moveOffset);
     let endDate = moment(startDate)
       .add(diff, 'minutes')
       .toDate();
-    if (endDate.getDate() > day.date.getDate()) {
-      endDate = moment(day.date)
+    if (endDate.getDate() > day.getDate()) {
+      endDate = moment(day)
         .add(1, 'day')
         .toDate();
       startDate = moment(endDate)
         .subtract(diff, 'minutes')
         .toDate();
-    }
-    if (startDate.getDate() !== this.movingEvent.startDate.getDate()) {
-      this.moveEventToDay(day);
     }
     this.movingEvent.startDate = startDate;
     this.movingEvent.endDate = endDate;
@@ -191,22 +166,14 @@ export class WeekComponent implements OnChanges {
   onMoveEnd() {
     if (this.resizingEvent) {
       this.resizingEvent = undefined;
-      this.startDate = undefined;
+      this.resizeStartDate = undefined;
     } else if (this.movingEvent) {
       this.movingEvent = undefined;
       this.moveOffset = undefined;
     }
   }
 
-  private moveEventToDay(day: Day) {
-    const previousDayIdx = moment(this.movingEvent.startDate).weekday();
-    const previousDay = this.days[previousDayIdx];
-    const eventIdx = previousDay.events.indexOf(this.movingEvent);
-    this.days[previousDayIdx].events.splice(eventIdx, 1);
-    day.events.push(this.movingEvent);
-  }
-
-  private getDay(clientX: number): Day {
+  private getDay(clientX: number): Date {
     const container: HTMLElement = this.container.nativeElement;
     const rect = container.getBoundingClientRect();
     const max = rect.right - rect.left;

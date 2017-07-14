@@ -5,11 +5,3 @@
     <span></span>
   </li>
 </ol>
-
-<div>
-  <scheduler-event *ngFor="let event of events"
-                   [event]="event"
-                   (resize)="startResizingEvent(event)"
-                   (move)="startMovingEvent(event, $event)">
-  </scheduler-event>
-</div>

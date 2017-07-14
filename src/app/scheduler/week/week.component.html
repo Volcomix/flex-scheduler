@@ -2,14 +2,19 @@
   <li *ngFor="let hour of hours">{{hour | number:'2.0-0'}}:00</li>
 </ol>
 
-<div #container
-     (mousedown)="onMouseDown($event)"
-     (touchstart)="onTouchStart($event)">
-  <scheduler-day *ngFor="let day of days"
-                 [day]="day.date"
-                 [hours]="hours"
-                 [events]="day.events"
-                 [step]="step"
-                 (resizeEvent)="startResizingEvent($event)"
-                 (moveEvent)="startMovingEvent($event)"></scheduler-day>
+<div>
+  <div>
+    <scheduler-day *ngFor="let day of days"
+                   [hours]="hours"></scheduler-day>
+  </div>
+
+  <div #container
+       (mousedown)="onMouseDown($event)"
+       (touchstart)="onTouchStart($event)">
+    <scheduler-event *ngFor="let event of events"
+                     [event]="event"
+                     (resize)="startResizingEvent(event)"
+                     (move)="startMovingEvent(event, $event)">
+    </scheduler-event>
+  </div>
 </div>
