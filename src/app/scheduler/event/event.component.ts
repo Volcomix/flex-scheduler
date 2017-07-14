@@ -35,12 +35,12 @@ export class EventComponent {
   }
 
   @HostBinding('style.top.%') get top() {
-    return this.toPercent(this.event.startDate);
+    return this.toVerticalPercent(this.event.startDate);
   }
 
   @HostBinding('style.bottom.%') get bottom() {
     // End hour cannot be 0h, so replace it with 24h
-    return 100 - (this.toPercent(this.event.endDate) || 100);
+    return 100 - (this.toVerticalPercent(this.event.endDate) || 100);
   }
 
   @HostBinding('style.left.%') get left() {
@@ -58,7 +58,7 @@ export class EventComponent {
     return duration < 60;
   }
 
-  private toPercent(date: Date) {
+  private toVerticalPercent(date: Date) {
     const hours = date.getHours();
     const minutes = hours * 60 + date.getMinutes();
     return 100 * minutes / Event.minutesPerDay;
