@@ -1,4 +1,6 @@
 <span>{{event.startDate | date:'shortTime'}}</span>
-<span>{{event.endDate | date:'shortTime'}}</span>
-<footer (mousedown)="resizeEvent($event)"
-        (touchstart)="resizeEvent($event)"></footer>
+<div>
+  {{event.endDate | date:'shortTime'}}
+  <footer (mousedown)="resizeEvent($event)"
+          (touchstart)="resizeEvent($event)"></footer>
+</div>
